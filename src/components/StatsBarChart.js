@@ -1,22 +1,30 @@
-import React,{Component} from 'react';
+import React from 'react';
 import BarChart from "recharts/lib/chart/BarChart";
-import { XAxis,YAxis,Tooltip,Bar } from "recharts";
+import {XAxis, YAxis, Tooltip, Bar, ResponsiveContainer} from "recharts";
+import choseColor from "../utils/utils"
+import noData from '../icons/noData.png'
 
 function StatsBarChart (props) {
-    const choseColor = () => {
-        if (props.product === "IJ") return "#fc315d"
-        if (props.product === "WS") return "#00ccd6"
-        return "#a44af2"
+
+    const returnContent = () => {
+        if (props.stats.length === 0){
+            return (<img title="No data found for date on this interval, try another date or interval" className="noData" src={noData} alt=""/>)
+        }
+        return (
+            <ResponsiveContainer width="90%" height={150}>
+                <BarChart className="barChart" data={props.stats}>
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey={props.product} fill={choseColor(props.product)}/>
+                </BarChart>
+            </ResponsiveContainer>
+        )
     }
 
     return(
         <div className="productStats" >
-            <BarChart className="barChart" width={530} height={150} data={props.stats}>
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey={props.product} fill={choseColor()}/>
-            </BarChart>
+            {returnContent()}
             <img className="icon" src={props.icon} alt=""/>
         </div>
     )
